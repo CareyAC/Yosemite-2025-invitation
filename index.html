@@ -86,7 +86,7 @@
 
     <script>
         async function loadGuests() {
-            const response = await fetch('guests.json');
+            const response = await fetch("https://script.google.com/macros/s/AKfycbwuYOCdbAGYI4aDvNTFctsxzoyROWiH4Une0xXjDIsVjmtxXvxlc5Eq_2vPsRyM1eVA/exec?getGuests=true");
             const guests = await response.json();
             const guestList = document.getElementById('guest-list');
             const guestSelect = document.getElementById('guest-name');
@@ -103,10 +103,30 @@
             });
         }
         
-        document.getElementById('rsvp-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('RSVP recorded! Please notify the organizer to update the guest list.');
-        });
+   document.getElementById('rsvp-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    let name = document.getElementById('guest-name').value;
+    let status = document.querySelector('input[name="rsvp"]:checked');
+    
+    if (!name || !status) {
+        alert("Please select your name and RSVP status.");
+        return;
+    }
+    
+    let response = await fetch("https://script.google.com/macros/s/AKfycbwuYOCdbAGYI4aDvNTFctsxzoyROWiH4Une0xXjDIsVjmtxXvxlc5Eq_2vPsRyM1eVA/exec", {  // 🔹 Replace with your actual URL
+        method: "POST",
+        body: JSON.stringify({ name: name, status: status.value }),
+        headers: { "Content-Type": "application/json" }
+    });
+
+if (response.ok) {
+    alert("RSVP recorded successfully! Your response has been saved.");
+    loadGuests();  // 🔹 This refreshes the guest list
+    } else {
+        alert("Error submitting RSVP. Please try again.");
+    }
+});
         
         loadGuests();
     </script>
