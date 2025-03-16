@@ -55,5 +55,60 @@
        <img src="NEW Gemini_Generated_Image_cl8wdicl8wdicl8w.jpeg" alt="Cartoon Camping Graphic">
         <a href="mailto:careyac000@gmail.com" class="button">RSVP Now</a>
     </div>
+    
+    <!-- 🔹 START of RSVP System -->
+    <h2>Guest List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="guest-list"></tbody>
+    </table>
+
+    <h2>Submit Your RSVP</h2>
+    <form id="rsvp-form">
+        <label for="guest-name">Select Your Name:</label>
+        <select id="guest-name"></select>
+        <br><br>
+        <label>
+            <input type="radio" name="rsvp" value="Attending"> Attending
+        </label>
+        <label>
+            <input type="radio" name="rsvp" value="Not Attending"> Not Attending
+        </label>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <!-- 🔹 END of RSVP System -->
+
+    <script>
+        async function loadGuests() {
+            const response = await fetch('guests.json');
+            const guests = await response.json();
+            const guestList = document.getElementById('guest-list');
+            const guestSelect = document.getElementById('guest-name');
+            
+            guestList.innerHTML = '';
+            guestSelect.innerHTML = '<option value="">--Select Your Name--</option>';
+            
+            guests.forEach(guest => {
+                let row = `<tr><td>${guest.name}</td><td>${guest.status}</td></tr>`;
+                guestList.innerHTML += row;
+                
+                let option = `<option value="${guest.name}">${guest.name}</option>`;
+                guestSelect.innerHTML += option;
+            });
+        }
+        
+        document.getElementById('rsvp-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('RSVP recorded! Please notify the organizer to update the guest list.');
+        });
+        
+        loadGuests();
+    </script>
 </body>
 </html>
